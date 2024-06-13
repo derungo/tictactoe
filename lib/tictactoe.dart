@@ -69,64 +69,90 @@ class _TicTacToeState extends State<TicTacToe> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Tic Tac Toe')),
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'X Wins: $_xWinsCount',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'X Wins: $_xWinsCount',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if (chalkboardImage != null)
+                        TallyMarks(count: _xWinsCount, chalkboardImage: chalkboardImage),
+                    ],
                   ),
                 ),
-                if (chalkboardImage != null)
-                  TallyMarks(count: _xWinsCount, chalkboardImage: chalkboardImage),
+                Flexible(
+                  child: AspectRatio(
+                    aspectRatio: 1.0,
+                    child: Container(
+                      margin: EdgeInsets.all(16.0),
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 4.0,
+                          crossAxisSpacing: 4.0,
+                          childAspectRatio: 1.0, // Ensures cells are square
+                        ),
+                        itemCount: 9,
+                        itemBuilder: (context, index) {
+                          return Cell(
+                            text: _cells[index],
+                            onTap: () => _handleCellTap(index),
+                            color: _cells[index] == 'X' ? Colors.red : _cells[index] == 'O' ? Colors.green : Colors.white,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'O Wins: $_oWinsCount',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if (chalkboardImage != null)
+                        TallyMarks(count: _oWinsCount, chalkboardImage: chalkboardImage),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-          Container(
-            width: 800,
-            height: 800,
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 4.0,
-                crossAxisSpacing: 4.0,
-                childAspectRatio: 1.0, // Ensures cells are square
+            const SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: _currentPlayer == 'X' ? Colors.red : Colors.green,
+                ),
+                color: _currentPlayer == 'X' ? Colors.red : Colors.green,
+                borderRadius: const BorderRadius.all(Radius.circular(5)),
               ),
-              itemCount: 9,
-              itemBuilder: (context, index) {
-                return Cell(
-                  text: _cells[index],
-                  onTap: () => _handleCellTap(index),
-                  color: _cells[index] == 'X' ? Colors.red : _cells[index] == 'O' ? Colors.green : Colors.white,
-                );
-              },
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                'It is $_currentPlayer\'s Turn',
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
             ),
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'O Wins: $_oWinsCount',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.green,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                if (chalkboardImage != null)
-                  TallyMarks(count: _oWinsCount, chalkboardImage: chalkboardImage),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
