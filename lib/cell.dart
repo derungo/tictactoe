@@ -12,17 +12,20 @@ class Cell extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: 50,
-        height: 50,
+        width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
-          color: color, // Set the color of the cell
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
+          color: color,
         ),
         child: Center(
           child: Text(
             text,
-            style: const TextStyle(fontSize: 24),
+            style: TextStyle(
+              fontSize: 72,
+              fontFamily: 'Comic Sans MS',
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
