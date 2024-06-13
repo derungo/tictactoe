@@ -62,6 +62,7 @@ class _TicTacToeState extends State<TicTacToe> {
             _xWinsCount++;
           }
         });
+        _confettiController.play();
         ShowDialog.showWinnerDialog(context, _currentPlayer == 'X' ? 'O' : 'X', _resetGame);
       } else if (GameLogic.checkForDraw(_cells)) {
         ShowDialog.showDrawDialog(context, _resetGame);
@@ -75,6 +76,42 @@ class _TicTacToeState extends State<TicTacToe> {
     setState(() {});
   }
 
+  Widget _buildChalkboard(String player, int winsCount) {
+    return Expanded(
+      child: Container(
+        decoration: _currentPlayer == player
+            ? BoxDecoration(
+                border: Border.all(color: Colors.yellow, width: 4),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.yellow.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                  ),
+                ],
+              )
+            : null,
+        padding: EdgeInsets.all(8.0),
+        margin: EdgeInsets.all(4.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '$player Wins: $winsCount',
+              style: TextStyle(
+                fontSize: 16,
+                color: player == 'X' ? Colors.red : Colors.green,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            if (chalkboardImage != null)
+              TallyMarks(count: winsCount, chalkboardImage: chalkboardImage),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,68 +122,39 @@ class _TicTacToeState extends State<TicTacToe> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'X Wins: $_xWinsCount',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildChalkboard('X', _xWinsCount),
+                      Flexible(
+                        flex: 2,
+                        child: AspectRatio(
+                          aspectRatio: 1.0,
+                          child: Container(
+                            margin: EdgeInsets.all(8.0),
+                            child: GridView.builder(
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                mainAxisSpacing: 4.0,
+                                crossAxisSpacing: 4.0,
+                                childAspectRatio: 1.0, // Ensures cells are square
+                              ),
+                              itemCount: 9,
+                              itemBuilder: (context, index) {
+                                return Cell(
+                                  text: _cells[index],
+                                  onTap: () => _handleCellTap(index),
+                                  color: _cells[index] == 'X' ? Colors.red : _cells[index] == 'O' ? Colors.green : Colors.white,
+                                );
+                              },
                             ),
-                          ),
-                          if (chalkboardImage != null)
-                            TallyMarks(count: _xWinsCount, chalkboardImage: chalkboardImage),
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      child: AspectRatio(
-                        aspectRatio: 1.0,
-                        child: Container(
-                          margin: EdgeInsets.all(16.0),
-                          child: GridView.builder(
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 4.0,
-                              crossAxisSpacing: 4.0,
-                              childAspectRatio: 1.0, // Ensures cells are square
-                            ),
-                            itemCount: 9,
-                            itemBuilder: (context, index) {
-                              return Cell(
-                                text: _cells[index],
-                                onTap: () => _handleCellTap(index),
-                                color: _cells[index] == 'X' ? Colors.red : _cells[index] == 'O' ? Colors.green : Colors.white,
-                              );
-                            },
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'O Wins: $_oWinsCount',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          if (chalkboardImage != null)
-                            TallyMarks(count: _oWinsCount, chalkboardImage: chalkboardImage),
-                        ],
-                      ),
-                    ),
-                  ],
+                      _buildChalkboard('O', _oWinsCount),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Container(
