@@ -18,7 +18,7 @@ class TicTacToe extends StatefulWidget {
 }
 
 class _TicTacToeState extends State<TicTacToe> {
-  late ui.Image chalkboardImage; // Image to draw
+  late ui.Image? chalkboardImage; // Image to draw
   List<String> _cells = List.filled(9, '');
   String _currentPlayer = 'X';
   int _xWinsCount = 0;
@@ -105,7 +105,7 @@ class _TicTacToeState extends State<TicTacToe> {
               ),
             ),
             if (chalkboardImage != null)
-              TallyMarks(count: winsCount, chalkboardImage: chalkboardImage),
+              TallyMarks(count: winsCount, chalkboardImage: chalkboardImage!),
           ],
         ),
       ),
@@ -114,6 +114,15 @@ class _TicTacToeState extends State<TicTacToe> {
 
   @override
   Widget build(BuildContext context) {
+    if (chalkboardImage == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text('Tic Tac Toe')),
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text('Tic Tac Toe')),
       body: Center(
@@ -124,7 +133,7 @@ class _TicTacToeState extends State<TicTacToe> {
               children: [
                 Expanded(
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       _buildChalkboard('X', _xWinsCount),
                       Flexible(
