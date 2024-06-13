@@ -1,36 +1,83 @@
 import 'dart:math';
-import 'package:confetti/confetti.dart'; // Import the confetti package
+import 'package:confetti/confetti.dart';
+import 'package:flutter/material.dart';
 
-import 'package:flutter/cupertino.dart';
+class ConfettiDisplay extends StatefulWidget {
+  final ConfettiController confettiController;
 
+  ConfettiDisplay({Key? key, required this.confettiController}) : super(key: key);
 
-class ConfettiDisplay extends StatelessWidget {
-  final ConfettiController _confettiController;
+  @override
+  _ConfettiDisplayState createState() => _ConfettiDisplayState();
+}
 
-  ConfettiDisplay({Key? key}) :
-        _confettiController = ConfettiController(duration: const Duration(seconds: 10)),
-        super(key: key);
+class _ConfettiDisplayState extends State<ConfettiDisplay> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    _confettiController.play();  // Start playing as soon as the widget is built
     return Stack(
       children: [
-        for (int i = 0; i < 5; i++) // Adjust the number of confetti widgets as needed
-          Positioned(
-            left: MediaQuery.of(context).size.width * i / 5, // Divide the width evenly
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 170.0), // Adjust padding to move right
             child: ConfettiWidget(
-              key: ValueKey<int>(i), // Use a unique key for each confetti widget
-              confettiController: _confettiController,
-              blastDirection: pi / 2,
-              maxBlastForce: 20,
-              minBlastForce: 10,
+              confettiController: widget.confettiController,
+              blastDirection: pi, // Pointing downwards
               emissionFrequency: 0.05,
-              numberOfParticles: 50,
+              numberOfParticles: 20,
+              maxBlastForce: 5,
+              minBlastForce: 2,
               gravity: 0.1,
-              shouldLoop: false, // Prevent looping to avoid continuous spawning
             ),
           ),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 170.0), // Adjust padding to move right
+            child: ConfettiWidget(
+              confettiController: widget.confettiController,
+              blastDirection: pi, // Pointing downwards
+              emissionFrequency: 0.05,
+              numberOfParticles: 20,
+              maxBlastForce: 5,
+              minBlastForce: 2,
+              gravity: 0.1,
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          child: ConfettiWidget(
+            confettiController: widget.confettiController,
+            blastDirection: pi, // Pointing downwards
+            emissionFrequency: 0.05,
+            numberOfParticles: 20,
+            maxBlastForce: 5,
+            minBlastForce: 2,
+            gravity: 0.1,
+          ),
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 50.0),
+            child: ConfettiWidget(
+              confettiController: widget.confettiController,
+              blastDirection: pi, // Pointing downwards
+              emissionFrequency: 0.05,
+              numberOfParticles: 20,
+              maxBlastForce: 5,
+              minBlastForce: 2,
+              gravity: 0.1,
+            ),
+          ),
+        ),
       ],
     );
   }
