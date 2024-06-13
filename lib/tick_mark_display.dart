@@ -1,25 +1,26 @@
 import 'dart:ui' as ui;
-
-
 import 'package:flutter/material.dart';
 
 class TallyMarksPainter extends CustomPainter {
   final int count;
   final ui.Image chalkboardImage;
 
-  TallyMarksPainter(this.count, this.chalkboardImage); // Fixed missing parenthesis
+  TallyMarksPainter(this.count, this.chalkboardImage);
 
   void paint(Canvas canvas, Size size) {
-    // Calculate scaling factors
-    double imageAspectRatio = chalkboardImage.width.toDouble() / chalkboardImage.height.toDouble();
-    double canvasAspectRatio = size.width / size.height;
-    double scaleFactor = canvasAspectRatio > imageAspectRatio ? size.height / chalkboardImage.height.toDouble() : size.width / chalkboardImage.width.toDouble();
-
-    // Increase scaleFactor to make the image larger
-    scaleFactor *= 5.0;
+    // Calculate width scaling factor
+    double widthScaleFactor = size.width / chalkboardImage.width.toDouble();
+    
+    // Double the height
+    double heightScaleFactor = widthScaleFactor * 1.75;
 
     // Calculate destination rectangle
-    Rect destinationRect = Rect.fromLTWH(0, 0, chalkboardImage.width.toDouble() * scaleFactor, chalkboardImage.height.toDouble() * scaleFactor);
+    Rect destinationRect = Rect.fromLTWH(
+      0,
+      0,
+      chalkboardImage.width.toDouble() * widthScaleFactor, // Keep width scale factor the same
+      chalkboardImage.height.toDouble() * heightScaleFactor // Double the height scale factor
+    );
 
     // Draw chalkboard image with the calculated destination rectangle
     canvas.drawImageRect(
@@ -74,18 +75,19 @@ class TallyMarksPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
+
 // Widget to use this painter
 class TallyMarks extends StatelessWidget {
   final int count;
-  final ui.Image chalkboardImage; // Added image parameter
+  final ui.Image chalkboardImage;
 
   const TallyMarks({Key? key, required this.count, required this.chalkboardImage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: const Size(200, 50), // Adjust the size based on your UI needs
-      painter: TallyMarksPainter(count, chalkboardImage), // Pass image to painter
+      size: const Size(1000, 130), // Adjust the size based on your UI needs, keeping width the same
+      painter: TallyMarksPainter(count, chalkboardImage),
     );
   }
 }

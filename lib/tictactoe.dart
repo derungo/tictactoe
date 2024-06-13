@@ -75,42 +75,45 @@ class _TicTacToeState extends State<TicTacToe> {
     _currentPlayer = 'X';
     setState(() {});
   }
-
-  Widget _buildChalkboard(String player, int winsCount) {
-    return Expanded(
-      child: Container(
-        decoration: _currentPlayer == player
-            ? BoxDecoration(
-                border: Border.all(color: Colors.yellow, width: 4),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.yellow.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                  ),
-                ],
-              )
-            : null,
-        padding: EdgeInsets.all(8.0),
-        margin: EdgeInsets.all(4.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '$player Wins: $winsCount',
-              style: TextStyle(
-                fontSize: 16,
-                color: player == 'X' ? Colors.red : Colors.green,
-                fontWeight: FontWeight.bold,
-              ),
+  
+Widget _buildChalkboard(String player, int winsCount) {
+  return Expanded(
+    child: Container(
+      decoration: _currentPlayer == player
+          ? BoxDecoration(
+              border: Border.all(color: Colors.yellow, width: 4),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.yellow.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                ),
+              ],
+            )
+          : null,
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      margin: EdgeInsets.all(4.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start, // Align children to the top
+        crossAxisAlignment: CrossAxisAlignment.center, // Center children horizontally
+        children: [
+          Text(
+            '$player Wins: $winsCount',
+            style: TextStyle(
+              fontSize: 30,
+              color: player == 'X' ? Colors.red : Colors.green,
+              fontWeight: FontWeight.bold,
             ),
-            if (chalkboardImage != null)
-              TallyMarks(count: winsCount, chalkboardImage: chalkboardImage!),
-          ],
-        ),
+          ),
+          if (chalkboardImage != null)
+            TallyMarks(count: winsCount, chalkboardImage: chalkboardImage!),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 
   @override
   Widget build(BuildContext context) {
