@@ -185,7 +185,7 @@ Widget _buildChalkboard(String player, int winsCount) {
               padding: const EdgeInsets.all(8),
               child: Text(
                 'It is $_currentPlayer\'s Turn',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
               ),
             ),
           ],

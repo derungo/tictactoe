@@ -16,7 +16,7 @@ class Cell extends StatelessWidget {
         height: double.infinity,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
-          color: color,
+          color: color.withOpacity(0.75),
         ),
         child: Center(
           child: Text(
