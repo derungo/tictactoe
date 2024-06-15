@@ -23,6 +23,19 @@ class GameWithBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.lightBlue,
+        title: Center(
+          child: Text(
+            'Tic Tac Toe',
+            style: TextStyle(
+              fontSize: 28, // Increase the font size as needed
+              fontWeight: FontWeight.bold,
+              color: Colors.white, // Text color (optional)
+            ),
+          ),
+        ),
+      ),
       body: Stack(
         children: [
           VideoBackground(),

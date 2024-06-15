@@ -132,8 +132,7 @@ Widget _buildChalkboard(String player, int winsCount) {
 
     return Scaffold(
   backgroundColor: Colors.transparent,
-  appBar: AppBar(title: Text('Tic Tac Toe')),
-  body: Center(
+   body: Center(
     child: Stack(
       children: [
         Column(
