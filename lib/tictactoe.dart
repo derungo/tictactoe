@@ -78,8 +78,13 @@ class _TicTacToeState extends State<TicTacToe> {
   
 Widget _buildChalkboard(String player, int winsCount) {
   return Expanded(
-    child: Container(
-      decoration: _currentPlayer == player
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+          Container(
+            height: 500,
+            decoration: _currentPlayer == player
           ? BoxDecoration(
               border: Border.all(color: Colors.yellow, width: 4),
               boxShadow: [
@@ -89,31 +94,30 @@ Widget _buildChalkboard(String player, int winsCount) {
                   blurRadius: 7,
                 ),
               ],
-            )
-          : null,
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      margin: EdgeInsets.all(4.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start, // Align children to the top
-        crossAxisAlignment: CrossAxisAlignment.center, // Center children horizontally
-        children: [
-          Text(
-            '$player Wins: $winsCount',
-            style: TextStyle(
-              fontSize: 30,
-              color: player == 'X' ? Colors.red : Colors.green,
-              fontWeight: FontWeight.bold,
+            ): null,
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+            margin: EdgeInsets.all(4.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  '$player Wins: $winsCount',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: player == 'X' ? Colors.red : Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                if (chalkboardImage != null)
+                  TallyMarks(count: winsCount, chalkboardImage: chalkboardImage!),
+              ],
             ),
-          ),
-          if (chalkboardImage != null)
-            TallyMarks(count: winsCount, chalkboardImage: chalkboardImage!),
-        ],
-      ),
+          )
+      ],
     ),
   );
 }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -127,68 +131,69 @@ Widget _buildChalkboard(String player, int winsCount) {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Tic Tac Toe')),
-      body: Center(
-        child: Stack(
+  backgroundColor: Colors.transparent,
+  appBar: AppBar(title: Text('Tic Tac Toe')),
+  body: Center(
+    child: Stack(
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _buildChalkboard('X', _xWinsCount),
-                      Flexible(
-                        flex: 2,
-                        child: AspectRatio(
-                          aspectRatio: 1.0,
-                          child: Container(
-                            margin: EdgeInsets.all(8.0),
-                            child: GridView.builder(
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                mainAxisSpacing: 4.0,
-                                crossAxisSpacing: 4.0,
-                                childAspectRatio: 1.0, // Ensures cells are square
-                              ),
-                              itemCount: 9,
-                              itemBuilder: (context, index) {
-                                return Cell(
-                                  text: _cells[index],
-                                  onTap: () => _handleCellTap(index),
-                                  color: _cells[index] == 'X' ? Colors.red : _cells[index] == 'O' ? Colors.green : Colors.white,
-                                );
-                              },
-                            ),
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildChalkboard('X', _xWinsCount),
+                  Flexible(
+                    flex: 2,
+                    child: AspectRatio(
+                      aspectRatio: 1.0,
+                      child: Container(
+                        margin: EdgeInsets.all(8.0),
+                        child: GridView.builder(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 4.0,
+                            crossAxisSpacing: 4.0,
+                            childAspectRatio: 1.0, // Ensures cells are square
                           ),
+                          itemCount: 9,
+                          itemBuilder: (context, index) {
+                            return Cell(
+                              text: _cells[index],
+                              onTap: () => _handleCellTap(index),
+                              color: _cells[index] == 'X' ? Colors.red : _cells[index] == 'O' ? Colors.green : Colors.white,
+                            );
+                          },
                         ),
                       ),
-                      _buildChalkboard('O', _oWinsCount),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: _currentPlayer == 'X' ? Colors.red : Colors.green,
                     ),
-                    color: _currentPlayer == 'X' ? Colors.red : Colors.green,
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
                   ),
-                  padding: const EdgeInsets.all(8),
-                  child: Text(
-                    'It is $_currentPlayer\'s Turn',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                ),
-              ],
+                  _buildChalkboard('O', _oWinsCount),
+                ],
+              ),
             ),
-            ConfettiDisplay(confettiController: _confettiController),
+            const SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: _currentPlayer == 'X' ? Colors.red : Colors.green,
+                ),
+                color: _currentPlayer == 'X' ? Colors.red : Colors.green,
+                borderRadius: const BorderRadius.all(Radius.circular(5)),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                'It is $_currentPlayer\'s Turn',
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+            ),
           ],
         ),
-      ),
-    );
+        ConfettiDisplay(confettiController: _confettiController),
+      ],
+    ),
+  ),
+);
   }
 }

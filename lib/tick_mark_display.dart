@@ -1,3 +1,4 @@
+//tick_mark_display.dart
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class TallyMarksPainter extends CustomPainter {
     double widthScaleFactor = size.width / chalkboardImage.width.toDouble();
     
     // Double the height
-    double heightScaleFactor = widthScaleFactor * 1.75;
+    double heightScaleFactor = widthScaleFactor * 1.25;
 
     // Calculate destination rectangle
     Rect destinationRect = Rect.fromLTWH(
@@ -37,7 +38,7 @@ class TallyMarksPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     double startX = 20;
-    double startY = size.height / 2 + 2;
+    double startY = 35;
     double lineLength = 30;
 
     int groupsOfFive = count ~/ 5;
@@ -83,11 +84,18 @@ class TallyMarks extends StatelessWidget {
 
   const TallyMarks({Key? key, required this.count, required this.chalkboardImage}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      size: const Size(1000, 130), // Adjust the size based on your UI needs, keeping width the same
-      painter: TallyMarksPainter(count, chalkboardImage),
+    @override
+Widget build(BuildContext context) {
+    return Expanded(
+      child: AspectRatio(
+        aspectRatio: 3.85, // Adjust this to maintain the aspect ratio of the chalkboard image
+        child: Container(
+          padding: EdgeInsets.only(top: 20.0), // Adjust this value to move the widget up or down
+          child: CustomPaint(
+            painter: TallyMarksPainter(count, chalkboardImage),
+          ),
+        ),
+      ),
     );
   }
 }
