@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+
+
 class VideoBackground extends StatefulWidget {
   @override
   _VideoBackgroundState createState() => _VideoBackgroundState();
@@ -8,16 +10,17 @@ class VideoBackground extends StatefulWidget {
 
 class _VideoBackgroundState extends State<VideoBackground> {
   late VideoPlayerController _controller;
-  late VideoPlayerController _reverseController;
-  bool _isInitialized = false;
-  bool _isReverseInitialized = false;
+  List<String> _videoPaths = [
+    'assets/animation_sky_grass_bubbles.mp4',
+    'assets/animation_sky_grass_bubbles_reversed.mp4',
+  ];
   int _currentVideoIndex = 0;
-  List<VideoPlayerController> _videoControllers = [];
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset('assets/animation_sky_grass_bubbles.mp4')
+    _controller = VideoPlayerController.asset(_videoPaths[_currentVideoIndex])
       ..initialize().then((_) {
         setState(() {
           _isInitialized = true;
@@ -25,59 +28,48 @@ class _VideoBackgroundState extends State<VideoBackground> {
         _controller.setLooping(false);
         _controller.addListener(_videoListener);
         _controller.play();
-        print('Original video initialized and playing.');
+        print('Video initialized and playing.');
       }).catchError((error) {
         print('Error initializing video: $error');
       });
-
-    _reverseController = VideoPlayerController.asset('assets/animation_sky_grass_bubbles_reversed.mp4')
-      ..initialize().then((_) {
-        setState(() {
-          _isReverseInitialized = true;
-        });
-        _reverseController.setLooping(false);
-        _reverseController.addListener(_videoListener);
-        print('Reversed video initialized.');
-      }).catchError((error) {
-        print('Error initializing reverse video: $error');
-      });
-
-    _videoControllers = [_controller, _reverseController];
   }
 
   void _videoListener() {
-    final currentController = _videoControllers[_currentVideoIndex];
-    if (currentController.value.position >= currentController.value.duration) {
-      _currentVideoIndex = (_currentVideoIndex + 1) % _videoControllers.length;
-      final nextController = _videoControllers[_currentVideoIndex];
-      nextController.seekTo(Duration.zero).then((_) {
-        setState(() {});
-        nextController.play();
-      });
+    if (_controller.value.position >= _controller.value.duration) {
+      _currentVideoIndex = (_currentVideoIndex + 1) % _videoPaths.length;
+      _controller.removeListener(_videoListener);
+      _controller.pause();
+      _controller = VideoPlayerController.asset(_videoPaths[_currentVideoIndex])
+        ..initialize().then((_) {
+          setState(() {});
+          _controller.setLooping(false);
+          _controller.addListener(_videoListener);
+          _controller.play();
+        }).catchError((error) {
+          print('Error initializing video: $error');
+        });
     }
   }
 
   @override
   void dispose() {
     _controller.removeListener(_videoListener);
-    _reverseController.removeListener(_videoListener);
     _controller.dispose();
-    _reverseController.dispose();
     super.dispose();
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        _isInitialized && _isReverseInitialized
+        _isInitialized
             ? SizedBox.expand(
                 child: FittedBox(
                   fit: BoxFit.cover,
                   child: SizedBox(
-                    width: _videoControllers[_currentVideoIndex].value.size.width,
-                    height: _videoControllers[_currentVideoIndex].value.size.height,
-                    child: VideoPlayer(_videoControllers[_currentVideoIndex]),
+                    width: _controller.value.size.width,
+                    height: _controller.value.size.height,
+                    child: VideoPlayer(_controller),
                   ),
                 ),
               )
