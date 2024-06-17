@@ -1,6 +1,4 @@
-import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tictactoe/game_logic.dart';
@@ -95,8 +93,8 @@ Widget _buildChalkboard(String player, int winsCount) {
                 ),
               ],
             ): null,
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
-            margin: EdgeInsets.all(4.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+            margin: const EdgeInsets.all(4.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,8 +121,8 @@ Widget _buildChalkboard(String player, int winsCount) {
   Widget build(BuildContext context) {
     if (chalkboardImage == null) {
       return Scaffold(
-        appBar: AppBar(title: Text('Tic Tac Toe')),
-        body: Center(
+        appBar: AppBar(title: const Text('Tic Tac Toe')),
+        body: const Center(
           child: CircularProgressIndicator(),
         ),
       );
@@ -148,9 +146,9 @@ Widget _buildChalkboard(String player, int winsCount) {
                     child: AspectRatio(
                       aspectRatio: 1.0,
                       child: Container(
-                        margin: EdgeInsets.all(8.0),
+                        margin: const EdgeInsets.all(8.0),
                         child: GridView.builder(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             mainAxisSpacing: 4.0,
                             crossAxisSpacing: 4.0,

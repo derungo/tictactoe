@@ -21,7 +21,7 @@ class Cell extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 72,
               fontFamily: 'Comic Sans MS',
               fontWeight: FontWeight.bold,

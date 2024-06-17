@@ -4,13 +4,15 @@ import 'package:video_player/video_player.dart';
 
 
 class VideoBackground extends StatefulWidget {
+  const VideoBackground({super.key});
+
   @override
   _VideoBackgroundState createState() => _VideoBackgroundState();
 }
 
 class _VideoBackgroundState extends State<VideoBackground> {
   late VideoPlayerController _controller;
-  List<String> _videoPaths = [
+  final List<String> _videoPaths = [
     'assets/animation_sky_grass_bubbles.mp4',
     'assets/animation_sky_grass_bubbles_reversed.mp4',
   ];
@@ -96,7 +98,7 @@ class _VideoBackgroundState extends State<VideoBackground> {
                         ..color = Colors.black, // Stroke color
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Tic Tac Toe',
                     style: TextStyle(
                       fontSize: 28,

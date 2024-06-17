@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class ConfettiDisplay extends StatefulWidget {
   final ConfettiController confettiController;
 
-  ConfettiDisplay({Key? key, required this.confettiController}) : super(key: key);
+  const ConfettiDisplay({super.key, required this.confettiController});
 
   @override
   _ConfettiDisplayState createState() => _ConfettiDisplayState();

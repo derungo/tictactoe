@@ -13,16 +13,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Tic Tac Toe',
       home: GameWithBackground(),
     );
   }
 }
 class GameWithBackground extends StatelessWidget {
+  const GameWithBackground({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return const Stack(
       children: [
         VideoBackground(),
         TicTacToe(), // Your game widget

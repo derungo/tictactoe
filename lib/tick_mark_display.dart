@@ -8,6 +8,7 @@ class TallyMarksPainter extends CustomPainter {
 
   TallyMarksPainter(this.count, this.chalkboardImage);
 
+  @override
   void paint(Canvas canvas, Size size) {
     // Calculate width scaling factor
     double widthScaleFactor = size.width / chalkboardImage.width.toDouble();
@@ -82,7 +83,7 @@ class TallyMarks extends StatelessWidget {
   final int count;
   final ui.Image chalkboardImage;
 
-  const TallyMarks({Key? key, required this.count, required this.chalkboardImage}) : super(key: key);
+  const TallyMarks({super.key, required this.count, required this.chalkboardImage});
 
     @override
 Widget build(BuildContext context) {
@@ -90,7 +91,7 @@ Widget build(BuildContext context) {
       child: AspectRatio(
         aspectRatio: 3.85, // Adjust this to maintain the aspect ratio of the chalkboard image
         child: Container(
-          padding: EdgeInsets.only(top: 20.0), // Adjust this value to move the widget up or down
+          padding: const EdgeInsets.only(top: 20.0), // Adjust this value to move the widget up or down
           child: CustomPaint(
             painter: TallyMarksPainter(count, chalkboardImage),
           ),
