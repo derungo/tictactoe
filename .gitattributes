@@ -1,3 +1,4 @@
 *.mov filter=lfs diff=lfs merge=lfs -text
 *.mp4 filter=lfs diff=lfs merge=lfs -text
 animation_sky_grass_bubbles.mov filter=lfs diff=lfs merge=lfs -text
+assets/animation_sky_grass_bubbles.mov filter=lfs diff=lfs merge=lfs -text
