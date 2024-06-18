@@ -32,7 +32,8 @@ dependencies:
     sdk: flutter
   confetti: ^0.7.0
   video_player: ^2.2.19 
-  
+  flutter_svg: ^0.22.0
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -65,7 +66,7 @@ flutter:
     - assets/chalkboard1.jpeg
     - assets/animation_sky_grass_bubbles.mp4
     - assets/animation_sky_grass_bubbles_reversed.mp4
-
+    - assets/icons/home.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

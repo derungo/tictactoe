@@ -13,12 +13,14 @@ class TicTacToe extends StatefulWidget {
   final GameType gameType;
   final Marker marker;
   final Difficulty? difficulty;
+  final VoidCallback onBackToHome;
 
   const TicTacToe({
     super.key,
     required this.gameType,
     required this.marker,
     this.difficulty,
+    required this.onBackToHome,
   });
 
   @override
@@ -158,93 +160,87 @@ class _TicTacToeState extends State<TicTacToe> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<ui.Image>(
-      future: _chalkboardImageFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
-            appBar: AppBar(title: const Text('Tic Tac Toe')),
-            body: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return Scaffold(
-            appBar: AppBar(title: const Text('Tic Tac Toe')),
-            body: Center(
-              child: Text('Error loading image: ${snapshot.error}'),
-            ),
-          );
-        } else {
-          final chalkboardImage = snapshot.data!;
-          return Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Center(
-              child: Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            _buildChalkboard('X', _xWinsCount, chalkboardImage),
-                            Flexible(
-                              flex: 2,
-                              child: AspectRatio(
-                                aspectRatio: 1.0,
-                                child: Container(
-                                  margin: const EdgeInsets.all(8.0),
-                                  child: GridView.builder(
-                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      mainAxisSpacing: 4.0,
-                                      crossAxisSpacing: 4.0,
-                                      childAspectRatio: 1.0, // Ensures cells are square
-                                    ),
-                                    itemCount: 9,
-                                    itemBuilder: (context, index) {
-                                      return Cell(
-                                        text: _cells[index],
-                                        onTap: () => _handleCellTap(index),
-                                        color: _cells[index] == 'X' ? Colors.red : _cells[index] == 'O' ? Colors.green : Colors.white,
-                                      );
-                                    },
+@override
+Widget build(BuildContext context) {
+  return FutureBuilder<ui.Image>(
+    future: _chalkboardImageFuture,
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (snapshot.hasError) {
+        return Center(
+          child: Text('Error loading image: ${snapshot.error}'),
+        );
+      } else {
+        final chalkboardImage = snapshot.data!;
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
+            child: Stack(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          _buildChalkboard('X', _xWinsCount, chalkboardImage),
+                          Flexible(
+                            flex: 2,
+                            child: AspectRatio(
+                              aspectRatio: 1.0,
+                              child: Container(
+                                margin: const EdgeInsets.all(8.0),
+                                child: GridView.builder(
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    mainAxisSpacing: 4.0,
+                                    crossAxisSpacing: 4.0,
+                                    childAspectRatio: 1.0, // Ensures cells are square
                                   ),
+                                  itemCount: 9,
+                                  itemBuilder: (context, index) {
+                                    return Cell(
+                                      text: _cells[index],
+                                      onTap: () => _handleCellTap(index),
+                                      color: _cells[index] == 'X' ? Colors.red : _cells[index] == 'O' ? Colors.green : Colors.white,
+                                    );
+                                  },
                                 ),
                               ),
                             ),
-                            _buildChalkboard('O', _oWinsCount, chalkboardImage),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: _currentPlayer == 'X' ? Colors.red : Colors.green,
                           ),
-                          color: _currentPlayer == 'X' ? Colors.red : Colors.green,
-                          borderRadius: const BorderRadius.all(Radius.circular(5)),
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        child: Text(
-                          'It is $_currentPlayer\'s Turn',
-                          style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
+                          _buildChalkboard('O', _oWinsCount, chalkboardImage),
+                        ],
                       ),
-                    ],
-                  ),
-                  ConfettiDisplay(confettiController: _confettiController),
-                ],
-              ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: _currentPlayer == 'X' ? Colors.red : Colors.green,
+                        ),
+                        color: _currentPlayer == 'X' ? Colors.red : Colors.green,
+                        borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: Text(
+                        'It is $_currentPlayer\'s Turn',
+                        style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+                ConfettiDisplay(confettiController: _confettiController),
+              ],
             ),
-          );
-        }
-      },
-    );
-  }
+          ),
+        );
+      }
+    },
+  );
+}
 }
