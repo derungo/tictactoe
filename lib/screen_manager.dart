@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tictactoe/game_type.dart';
 import 'package:tictactoe/game_type_selection_screen.dart';
+import 'package:tictactoe/game_selection_state.dart';
 import 'package:tictactoe/tictactoe.dart';
+import 'package:tictactoe/game_type_selection.dart'; // Import MarkerSelection and DifficultySelection
 import 'video_player_widget.dart';
+import 'package:provider/provider.dart';
+import 'game_type.dart';
 
 class ScreenManager extends StatefulWidget {
   const ScreenManager({super.key});
@@ -12,38 +15,56 @@ class ScreenManager extends StatefulWidget {
 }
 
 class _ScreenManagerState extends State<ScreenManager> {
-  Widget _currentScreen = Container(); // Placeholder
-
   @override
-  void initState() {
-    super.initState();
-    _currentScreen = GameTypeSelectionScreen(startGameCallback: _startGame);
-  }
-
-  void _startGame(GameType gameType, Marker marker, Difficulty? difficulty) {
-    setState(() {
-      _currentScreen = TicTacToe(
-        gameType: gameType,
-        marker: marker,
-        difficulty: difficulty,
-        onBackToHome: _backToHome,
-      );
-    });
-  }
-
-  void _backToHome() {
-    setState(() {
-      _currentScreen = GameTypeSelectionScreen(startGameCallback: _startGame);
-    });
-  }
-
- @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
           const VideoBackground(),
-          _currentScreen,
+          Consumer<GameSelectionState>(
+            builder: (context, gameState, child) {
+              print('GameSelectionState: $gameState');
+              print('Selected GameType: ${gameState.selectedGameType}');
+              print('Selected Marker: ${gameState.selectedMarker}');
+              print('Selected Difficulty: ${gameState.selectedDifficulty}');
+              if (gameState == null) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (gameState.selectedGameType == null) {
+                return GameTypeSelectionScreen(
+                  startGameCallback: (gameType, marker, difficulty) {
+                    gameState.selectGameType(gameType);
+                    gameState.selectMarker(marker);
+                    if (difficulty != null) {
+                      gameState.selectDifficulty(difficulty);
+                    }
+                  },
+                );
+              } else if (gameState.selectedMarker == null) {
+                return MarkerSelection(
+                  onSelect: (marker) {
+                    gameState.selectMarker(marker);
+                  },
+                );
+              } else if (gameState.selectedDifficulty == null && gameState.selectedGameType == GameType.singlePlayer) {
+                return DifficultySelection(
+                  onSelect: (difficulty) {
+                    gameState.selectDifficulty(difficulty);
+                  },
+                );
+              } else {
+                return TicTacToe(
+                  gameType: gameState.selectedGameType!,
+                  marker: gameState.selectedMarker!,
+                  difficulty: gameState.selectedDifficulty,
+                  onBackToHome: () {
+                    gameState.reset();
+                  },
+                );
+              }
+            },
+          ),
           Positioned(
             top: 0,
             left: 0,
@@ -52,20 +73,16 @@ class _ScreenManagerState extends State<ScreenManager> {
               backgroundColor: Colors.transparent,
               elevation: 0,
               actions: [
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
+                IconButton(
+                  icon: Image.asset(
+                    'assets/icons/home.png',
+                    width: 24,
+                    height: 24,
+                    color: Colors.black,
                   ),
-                  child: IconButton(
-                    icon: Image.asset(
-                      'assets/icons/home.png',
-                      width: 24,
-                      height: 24,
-                      color: Colors.black, // Ensure icon color contrasts with background
-                    ),
-                    onPressed: _backToHome,
-                  ),
+                  onPressed: () {
+                    Provider.of<GameSelectionState>(context, listen: false).reset();
+                  },
                 ),
               ],
               title: Center(
@@ -80,7 +97,7 @@ class _ScreenManagerState extends State<ScreenManager> {
                         foreground: Paint()
                           ..style = PaintingStyle.stroke
                           ..strokeWidth = 6
-                          ..color = Colors.black, // Stroke color
+                          ..color = Colors.black,
                       ),
                     ),
                     const Text(
@@ -88,7 +105,7 @@ class _ScreenManagerState extends State<ScreenManager> {
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white, // Fill color
+                        color: Colors.white,
                       ),
                     ),
                   ],

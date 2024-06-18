@@ -1,36 +1,30 @@
-import 'package:flutter/material.dart';
-import 'package:tictactoe/game_type.dart';
+import 'package:flutter/foundation.dart';
+import 'game_type.dart';
 
-class GameSelectionState with ChangeNotifier {
-  GameType? _selectedGameType;
-  Marker? _selectedMarker;
-  Difficulty? _selectedDifficulty;
-
-  GameType? get selectedGameType => _selectedGameType;
-  Marker? get selectedMarker => _selectedMarker;
-  Difficulty? get selectedDifficulty => _selectedDifficulty;
+class GameSelectionState extends ChangeNotifier {
+  GameType? selectedGameType;
+  Marker? selectedMarker;
+  Difficulty? selectedDifficulty;
 
   void selectGameType(GameType gameType) {
-    _selectedGameType = gameType;
-    _selectedMarker = null;
-    _selectedDifficulty = null;
+    selectedGameType = gameType;
     notifyListeners();
   }
 
   void selectMarker(Marker marker) {
-    _selectedMarker = marker;
+    selectedMarker = marker;
     notifyListeners();
   }
 
-  void selectDifficulty(Difficulty difficulty) {
-    _selectedDifficulty = difficulty;
+  void selectDifficulty(Difficulty? difficulty) {
+    selectedDifficulty = difficulty;
     notifyListeners();
   }
 
   void reset() {
-    _selectedGameType = null;
-    _selectedMarker = null;
-    _selectedDifficulty = null;
+    selectedGameType = null;
+    selectedMarker = null;
+    selectedDifficulty = null;
     notifyListeners();
   }
 }

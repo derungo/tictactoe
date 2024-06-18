@@ -4,7 +4,7 @@ import 'package:tictactoe/game_type.dart';
 
 class GameTypeSelection extends StatelessWidget {
   final Function(GameType) onSelect;
-  const GameTypeSelection({required this.onSelect});
+  const GameTypeSelection({super.key, required this.onSelect});
 
   @override
   Widget build(BuildContext context) {
@@ -29,85 +29,90 @@ class GameTypeSelection extends StatelessWidget {
 
 class MarkerSelection extends StatelessWidget {
   final Function(Marker) onSelect;
-  const MarkerSelection({required this.onSelect});
+  const MarkerSelection({super.key, required this.onSelect});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Text(
-          "Which marker would you like to use?",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () => onSelect(Marker.X),
-              child: Image.asset('assets/x.webp', scale: 2),
-            ),
-            const SizedBox(width: 20),
-            GestureDetector(
-              onTap: () => onSelect(Marker.O),
-              child: Image.asset('assets/o.webp', scale: 2),
-            ),
-          ],
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(16.0), // Add padding around the entire column
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            "Which marker would you like to use?",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () => onSelect(Marker.X),
+                child: Image.asset('assets/x.webp', scale: 4), // Adjusted scale value
+              ),
+              const SizedBox(width: 20),
+              GestureDetector(
+                onTap: () => onSelect(Marker.O),
+                child: Image.asset('assets/o.webp', scale: 4), // Adjusted scale value
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
 
 class DifficultySelection extends StatelessWidget {
   final Function(Difficulty) onSelect;
-  const DifficultySelection({required this.onSelect});
+  const DifficultySelection({super.key, required this.onSelect});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Text(
-          "Select Difficulty:",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () => onSelect(Difficulty.easy),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Transform.scale(
-                  scale: 0.75,
-                  child: Image.asset('assets/easydog.webp'),
+    return Padding(
+      padding: const EdgeInsets.all(16.0), // Add padding around the entire column
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            "Select Difficulty:",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => onSelect(Difficulty.easy),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset('assets/easydog.webp', fit: BoxFit.contain),
+                  ),
                 ),
               ),
-            ),
-            GestureDetector(
-              onTap: () => onSelect(Difficulty.normal),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Transform.scale(
-                  scale: 0.75,
-                  child: Image.asset('assets/normalcat.webp'),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => onSelect(Difficulty.normal),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset('assets/normalcat.webp', fit: BoxFit.contain),
+                  ),
                 ),
               ),
-            ),
-            GestureDetector(
-              onTap: () => onSelect(Difficulty.hard),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Transform.scale(
-                  scale: 0.75,
-                  child: Image.asset('assets/hardrat.webp'),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => onSelect(Difficulty.hard),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset('assets/hardrat.webp', fit: BoxFit.contain),
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
