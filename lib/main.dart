@@ -1,11 +1,9 @@
-//main.dart
 import 'package:flutter/material.dart';
-import 'package:tictactoe/tictactoe.dart';
-import 'video_player_widget.dart'; // Import the video player widget
+import 'screen_manager.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -15,20 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Tic Tac Toe',
-      home: GameWithBackground(),
-    );
-  }
-}
-class GameWithBackground extends StatelessWidget {
-  const GameWithBackground({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Stack(
-      children: [
-        VideoBackground(),
-        TicTacToe(), // Your game widget
-      ],
+      home: ScreenManager(),
     );
   }
 }

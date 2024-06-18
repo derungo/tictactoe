@@ -7,9 +7,19 @@ import 'cell.dart';
 import 'tick_mark_display.dart';
 import 'confetti_widget.dart';
 import 'package:confetti/confetti.dart';
+import 'game_type.dart';
 
 class TicTacToe extends StatefulWidget {
-  const TicTacToe({super.key});
+  final GameType gameType;
+  final Marker marker;
+  final Difficulty? difficulty;
+
+  const TicTacToe({
+    super.key,
+    required this.gameType,
+    required this.marker,
+    this.difficulty,
+  });
 
   @override
   _TicTacToeState createState() => _TicTacToeState();
@@ -18,7 +28,7 @@ class TicTacToe extends StatefulWidget {
 class _TicTacToeState extends State<TicTacToe> {
   late Future<ui.Image> _chalkboardImageFuture;
   List<String> _cells = List.filled(9, '');
-  String _currentPlayer = 'X';
+  late String _currentPlayer;
   int _xWinsCount = 0;
   int _oWinsCount = 0;
 
@@ -48,28 +58,61 @@ class _TicTacToeState extends State<TicTacToe> {
   void _handleCellTap(int index) {
     if (_cells[index] == '') {
       _cells[index] = _currentPlayer;
-      _currentPlayer = _currentPlayer == 'X' ? 'O' : 'X';
-      setState(() {});
       if (GameLogic.checkForWinner(_cells)) {
         setState(() {
           if (_currentPlayer == 'X') {
-            _oWinsCount++;
-          } else {
             _xWinsCount++;
+          } else {
+            _oWinsCount++;
           }
         });
         _confettiController.play();
-        ShowDialog.showWinnerDialog(context, _currentPlayer == 'X' ? 'O' : 'X', _resetGame);
+        ShowDialog.showWinnerDialog(context, _currentPlayer, _resetGame);
       } else if (GameLogic.checkForDraw(_cells)) {
         ShowDialog.showDrawDialog(context, _resetGame);
+      } else {
+        _switchPlayer();
+        if (widget.gameType == GameType.singlePlayer && _currentPlayer != _playerMarker()) {
+          _handleAITurn();
+        }
       }
     }
   }
 
+  void _handleAITurn() {
+    int aiMove;
+    if (widget.difficulty == Difficulty.easy) {
+      aiMove = GameLogic.getRandomMove(_cells);
+    } else if (widget.difficulty == Difficulty.normal) {
+      aiMove = GameLogic.getNormalMove(_cells, _playerMarker(), _aiMarker());
+    } else {
+      aiMove = GameLogic.getHardMove(_cells, _playerMarker(), _aiMarker());
+    }
+    _handleCellTap(aiMove);
+  }
+
+  void _switchPlayer() {
+    setState(() {
+      _currentPlayer = _currentPlayer == 'X' ? 'O' : 'X';
+    });
+  }
+
+  String _playerMarker() {
+    return widget.marker == Marker.X ? 'X' : 'O';
+  }
+
+  String _aiMarker() {
+    return widget.marker == Marker.X ? 'O' : 'X';
+  }
+
   void _resetGame() {
-    _cells = List.filled(9, '');
-    _currentPlayer = 'X';
-    setState(() {});
+    setState(() {
+      _cells = List.filled(9, '');
+      _currentPlayer = _playerMarker();
+    });
+    if (widget.gameType == GameType.singlePlayer && _currentPlayer != _playerMarker()) {
+      _handleAITurn();
+    }
   }
 
   Widget _buildChalkboard(String player, int winsCount, ui.Image chalkboardImage) {
