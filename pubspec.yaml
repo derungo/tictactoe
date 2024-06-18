@@ -67,7 +67,15 @@ flutter:
     - assets/animation_sky_grass_bubbles.mp4
     - assets/animation_sky_grass_bubbles_reversed.mp4
     - assets/icons/home.png
-
+    - assets/1player.webp
+    - assets/2player.webp
+    - assets/tictactoe.webp
+    - assets/x.webp
+    - assets/o.webp
+    - assets/easydog.webp
+    - assets/normalcat.webp
+    - assets/hardrat.webp
+    - assets/startgame.webp
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
