@@ -136,11 +136,13 @@ class _TicTacToeState extends State<TicTacToe> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Chalkboard(
-                              player: 'X',
-                              winsCount: _xWinsCount,
-                              chalkboardImage: chalkboardImage,
-                              currentPlayer: _currentPlayer,
+                            Expanded(
+                              child: Chalkboard(
+                                player: 'X',
+                                winsCount: _xWinsCount,
+                                chalkboardImage: chalkboardImage,
+                                currentPlayer: _currentPlayer,
+                              ),
                             ),
                             Flexible(
                               flex: 2,
@@ -160,22 +162,19 @@ class _TicTacToeState extends State<TicTacToe> {
                                       return Cell(
                                         text: _cells[index],
                                         onTap: () => _handleCellTap(index),
-                                        color: _cells[index] == 'X'
-                                            ? Colors.red
-                                            : _cells[index] == 'O'
-                                                ? Colors.green
-                                                : Colors.white,
                                       );
                                     },
                                   ),
                                 ),
                               ),
                             ),
-                            Chalkboard(
-                              player: 'O',
-                              winsCount: _oWinsCount,
-                              chalkboardImage: chalkboardImage,
-                              currentPlayer: _currentPlayer,
+                            Expanded(
+                              child: Chalkboard(
+                                player: 'O',
+                                winsCount: _oWinsCount,
+                                chalkboardImage: chalkboardImage,
+                                currentPlayer: _currentPlayer,
+                              ),
                             ),
                           ],
                         ),
