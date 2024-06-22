@@ -13,9 +13,9 @@ class TallyMarksPainter extends CustomPainter {
       ..strokeWidth = 4
       ..style = PaintingStyle.stroke;
 
-    double startX = 20;
-    double startY = 40; // Adjusted startY to position at the top left
-    double lineLength = 30;
+    double startX = size.width * 0.1; // Start 5% from the left
+    double startY = size.height * 0.05; // Start 5% from the top
+    double lineLength = size.height * 0.1; // Adjust line length based on the size
 
     int groupsOfFive = count ~/ 5;
     int leftover = count % 5;
@@ -24,25 +24,25 @@ class TallyMarksPainter extends CustomPainter {
     for (int i = 0; i < groupsOfFive; i++) {
       for (int j = 0; j < 4; j++) { // Draw vertical lines
         canvas.drawLine(
-          Offset(startX + j * 10, startY - lineLength / 2),
-          Offset(startX + j * 10, startY + lineLength / 2),
+          Offset(startX + j * lineLength * 0.33, startY),
+          Offset(startX + j * lineLength * 0.33, startY + lineLength),
           paint,
         );
       }
       // Draw diagonal line crossing the four vertical lines
       canvas.drawLine(
-        Offset(startX, startY - lineLength / 2),
-        Offset(startX + 30, startY + lineLength / 2),
+        Offset(startX, startY),
+        Offset(startX + lineLength * 1.2, startY + lineLength),
         paint,
       );
-      startX += 50; // Space between sets of five
+      startX += lineLength * 1.5; // Space between sets of five
     }
 
     // Draw leftover vertical lines
     for (int i = 0; i < leftover; i++) {
       canvas.drawLine(
-        Offset(startX + i * 10, startY - lineLength / 2),
-        Offset(startX + i * 10, startY + lineLength / 2),
+        Offset(startX + i * lineLength * 0.33, startY),
+        Offset(startX + i * lineLength * 0.33, startY + lineLength),
         paint,
       );
     }
@@ -60,11 +60,8 @@ class TallyMarks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 3.85, // Adjust this to maintain the aspect ratio of the chalkboard image
-      child: CustomPaint(
-        painter: TallyMarksPainter(count),
-      ),
+    return CustomPaint(
+      painter: TallyMarksPainter(count),
     );
   }
 }

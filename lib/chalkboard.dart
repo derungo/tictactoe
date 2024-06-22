@@ -49,9 +49,14 @@ class Chalkboard extends StatelessWidget {
             child: CustomPaint(
               size: Size.infinite,
               painter: ChalkboardPainter(chalkboardImage),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: TallyMarks(count: winsCount),
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: CustomPaint(
+                      painter: TallyMarksPainter(winsCount),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
