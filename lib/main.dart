@@ -64,8 +64,8 @@ class _SplashScreenState extends State<SplashScreen> {
             Center(
               child: Image.asset(
                 'assets/tictactoe.webp',
-                width: 200, // Adjust the size as needed
-                height: 200,
+                width: 500, // Adjust the size as needed
+                height: 500,
               ),
             ),
           ],

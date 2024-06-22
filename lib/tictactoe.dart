@@ -127,65 +127,72 @@ class _TicTacToeState extends State<TicTacToe> {
           return Scaffold(
             backgroundColor: Colors.transparent,
             body: Center(
-              child: Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  double gridSize = constraints.maxWidth < constraints.maxHeight
+                      ? constraints.maxWidth
+                      : constraints.maxHeight;
+                  return Stack(
                     children: [
-                      Expanded(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Chalkboard(
-                                player: 'X',
-                                winsCount: _xWinsCount,
-                                chalkboardImage: chalkboardImage,
-                                currentPlayer: _currentPlayer,
-                              ),
-                            ),
-                            Flexible(
-                              flex: 2,
-                              child: AspectRatio(
-                                aspectRatio: 1.0,
-                                child: Container(
-                                  margin: const EdgeInsets.all(8.0),
-                                  child: GridView.builder(
-                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      mainAxisSpacing: 4.0,
-                                      crossAxisSpacing: 4.0,
-                                      childAspectRatio: 1.0, // Ensures cells are square
-                                    ),
-                                    itemCount: 9,
-                                    itemBuilder: (context, index) {
-                                      return Cell(
-                                        text: _cells[index],
-                                        onTap: () => _handleCellTap(index),
-                                      );
-                                    },
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Chalkboard(
+                                    player: 'X',
+                                    winsCount: _xWinsCount,
+                                    chalkboardImage: chalkboardImage,
+                                    currentPlayer: _currentPlayer,
                                   ),
                                 ),
-                              ),
+                                Flexible(
+                                  flex: 2,
+                                  child: AspectRatio(
+                                    aspectRatio: 1.0,
+                                    child: Container(
+                                      width: gridSize,
+                                      height: gridSize,
+                                      margin: const EdgeInsets.all(8.0),
+                                      child: GridView.builder(
+                                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3,
+                                          mainAxisSpacing: 4.0,
+                                          crossAxisSpacing: 4.0,
+                                          childAspectRatio: 1.0, // Ensures cells are square
+                                        ),
+                                        itemCount: 9,
+                                        itemBuilder: (context, index) {
+                                          return Cell(
+                                            text: _cells[index],
+                                            onTap: () => _handleCellTap(index),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Chalkboard(
+                                    player: 'O',
+                                    winsCount: _oWinsCount,
+                                    chalkboardImage: chalkboardImage,
+                                    currentPlayer: _currentPlayer,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              child: Chalkboard(
-                                player: 'O',
-                                winsCount: _oWinsCount,
-                                chalkboardImage: chalkboardImage,
-                                currentPlayer: _currentPlayer,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 10), // Keep the space
+                        ],
                       ),
-                      const SizedBox(height: 10), // Keep the space
-
-
+                      ConfettiDisplay(confettiController: _confettiController),
                     ],
-                  ),
-                  ConfettiDisplay(confettiController: _confettiController),
-                ],
+                  );
+                },
               ),
             ),
           );
