@@ -179,25 +179,9 @@ class _TicTacToeState extends State<TicTacToe> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: _currentPlayer == 'X' ? Colors.red : Colors.green,
-                          ),
-                          color: _currentPlayer == 'X' ? Colors.red : Colors.green,
-                          borderRadius: const BorderRadius.all(Radius.circular(5)),
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        child: Text(
-                          'It is $_currentPlayer\'s Turn',
-                          style: const TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                      const SizedBox(height: 10), // Keep the space
+
+
                     ],
                   ),
                   ConfettiDisplay(confettiController: _confettiController),
