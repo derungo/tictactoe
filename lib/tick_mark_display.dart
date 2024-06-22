@@ -1,37 +1,12 @@
-//tick_mark_display.dart
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class TallyMarksPainter extends CustomPainter {
   final int count;
-  final ui.Image chalkboardImage;
 
-  TallyMarksPainter(this.count, this.chalkboardImage);
+  TallyMarksPainter(this.count);
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Calculate width scaling factor
-    double widthScaleFactor = size.width / chalkboardImage.width.toDouble();
-    
-    // Double the height
-    double heightScaleFactor = widthScaleFactor * 1.25;
-
-    // Calculate destination rectangle
-    Rect destinationRect = Rect.fromLTWH(
-      0,
-      0,
-      chalkboardImage.width.toDouble() * widthScaleFactor, // Keep width scale factor the same
-      chalkboardImage.height.toDouble() * heightScaleFactor // Double the height scale factor
-    );
-
-    // Draw chalkboard image with the calculated destination rectangle
-    canvas.drawImageRect(
-      chalkboardImage, // Image to draw
-      Rect.fromLTWH(0, 0, chalkboardImage.width.toDouble(), chalkboardImage.height.toDouble()), // Source rect
-      destinationRect, // Destination rect
-      Paint(), // Paint
-    );
-
     // Tally mark paint
     var paint = Paint()
       ..color = Colors.white
@@ -39,7 +14,7 @@ class TallyMarksPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     double startX = 20;
-    double startY = 35;
+    double startY = 30; // Adjusted startY to position at the top left
     double lineLength = 30;
 
     int groupsOfFive = count ~/ 5;
@@ -77,25 +52,18 @@ class TallyMarksPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
-
 // Widget to use this painter
 class TallyMarks extends StatelessWidget {
   final int count;
-  final ui.Image chalkboardImage;
 
-  const TallyMarks({super.key, required this.count, required this.chalkboardImage});
+  const TallyMarks({super.key, required this.count});
 
-    @override
-Widget build(BuildContext context) {
-    return Expanded(
-      child: AspectRatio(
-        aspectRatio: 3.85, // Adjust this to maintain the aspect ratio of the chalkboard image
-        child: Container(
-          padding: const EdgeInsets.only(top: 20.0), // Adjust this value to move the widget up or down
-          child: CustomPaint(
-            painter: TallyMarksPainter(count, chalkboardImage),
-          ),
-        ),
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 3.85, // Adjust this to maintain the aspect ratio of the chalkboard image
+      child: CustomPaint(
+        painter: TallyMarksPainter(count),
       ),
     );
   }
