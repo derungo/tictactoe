@@ -14,7 +14,7 @@ class TallyMarksPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     double startX = 20;
-    double startY = 30; // Adjusted startY to position at the top left
+    double startY = 40; // Adjusted startY to position at the top left
     double lineLength = 30;
 
     int groupsOfFive = count ~/ 5;

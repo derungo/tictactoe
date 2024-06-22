@@ -46,19 +46,12 @@ class Chalkboard extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: AspectRatio(
-              aspectRatio: 3.85, // Adjust this to maintain the aspect ratio of the chalkboard image
-              child: Stack(
-                children: [
-                  CustomPaint(
-                    size: Size.infinite,
-                    painter: ChalkboardPainter(chalkboardImage),
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: TallyMarks(count: winsCount),
-                  ),
-                ],
+            child: CustomPaint(
+              size: Size.infinite,
+              painter: ChalkboardPainter(chalkboardImage),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: TallyMarks(count: winsCount),
               ),
             ),
           ),
@@ -75,21 +68,22 @@ class ChalkboardPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Calculate width scaling factor
-    double widthScaleFactor = size.width / chalkboardImage.width.toDouble();
+    // Calculate the scale factor to fill the available space while maintaining aspect ratio
+    double scaleX = size.width / chalkboardImage.width.toDouble();
+    double scaleY = size.height / chalkboardImage.height.toDouble();
+    double scale = scaleX < scaleY ? scaleX : scaleY;
 
-    // Double the height
-    double heightScaleFactor = widthScaleFactor * 1.25;
-
-    // Calculate destination rectangle
+    // Calculate the destination rectangle to center the image within the available space
+    double dx = (size.width - (chalkboardImage.width.toDouble() * scale)) / 2;
+    double dy = (size.height - (chalkboardImage.height.toDouble() * scale)) / 2;
     Rect destinationRect = Rect.fromLTWH(
-        0,
-        0,
-        chalkboardImage.width.toDouble() * widthScaleFactor, // Keep width scale factor the same
-        chalkboardImage.height.toDouble() * heightScaleFactor // Double the height scale factor
+      0,
+      0,
+      size.width, // Fill the width of the container
+      size.height, // Fill the height of the container
     );
 
-    // Draw chalkboard image with the calculated destination rectangle
+    // Draw the chalkboard image within the calculated destination rectangle
     canvas.drawImageRect(
       chalkboardImage, // Image to draw
       Rect.fromLTWH(0, 0, chalkboardImage.width.toDouble(), chalkboardImage.height.toDouble()), // Source rect
