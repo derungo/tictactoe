@@ -94,13 +94,16 @@ class _ScreenManagerState extends State<ScreenManager> {
                 } 
                 // Otherwise, show the Tic Tac Toe game screen.
                 else {
-                  return TicTacToe(
-                    gameType: gameState.selectedGameType!,
-                    marker: gameState.selectedMarker!,
-                    difficulty: gameState.selectedDifficulty,
-                    onBackToHome: () {
-                      gameState.reset();
-                    },
+                  return Padding(
+                    padding: EdgeInsets.only(top: kToolbarHeight),
+                    child: TicTacToe(
+                      gameType: gameState.selectedGameType!,
+                      marker: gameState.selectedMarker!,
+                      difficulty: gameState.selectedDifficulty,
+                      onBackToHome: () {
+                        gameState.reset();
+                      },
+                    ),
                   );
                 }
               },
