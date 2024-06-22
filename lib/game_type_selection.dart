@@ -8,21 +8,51 @@ class GameTypeSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: () => onSelect(GameType.singlePlayer),
-          child: Image.asset('assets/1player.webp', scale: 4),
-        ),
-        const SizedBox(width: 20),
-        Image.asset('assets/tictactoe.webp', scale: 2),
-        const SizedBox(width: 20),
-        GestureDetector(
-          onTap: () => onSelect(GameType.twoPlayer),
-          child: Image.asset('assets/2player.webp', scale: 4),
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double scale = 4;
+        double spacing = 20;
+
+        // Adjust the scale and spacing based on the available width
+        if (constraints.maxWidth < 800) {
+          scale = 3;
+          spacing = 15;
+        }
+        if (constraints.maxWidth < 600) {
+          scale = 2.5;
+          spacing = 10;
+        }
+
+        return Flex(
+          direction: Axis.horizontal,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
+              child: GestureDetector(
+                onTap: () => onSelect(GameType.singlePlayer),
+                child: Image.asset('assets/1player.webp', scale: scale),
+              ),
+            ),
+            SizedBox(width: spacing),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
+              child: Image.asset('assets/tictactoe.webp', scale: scale / 2),
+            ),
+            SizedBox(width: spacing),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
+              child: GestureDetector(
+                onTap: () => onSelect(GameType.twoPlayer),
+                child: Image.asset('assets/2player.webp', scale: scale),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
